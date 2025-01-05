@@ -5,4 +5,3 @@ SELECT id,  CASE
     ELSE 'HIGH'
 END AS size
 FROM ecoli_data
-    
