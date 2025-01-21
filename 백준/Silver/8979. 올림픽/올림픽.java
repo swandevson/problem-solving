@@ -6,12 +6,14 @@ class Country implements Comparable<Country> {
     public int gold;
     public int silver;
     public int bronze;
+    public int rank;
     
     public Country(int num, int gold, int silver, int bronze) {
         this.num = num;
         this.gold = gold;
         this.silver = silver;
         this.bronze = bronze;
+        this.rank = 1;
     }
     
     @Override
@@ -24,7 +26,20 @@ class Country implements Comparable<Country> {
         }
         
         return this.bronze - country.bronze;
+    }
+    
+    public boolean isSameRank(Country country) {
+        if (this.gold != country.gold) {
+            return false;
+        }
+        if (this.silver != country.silver) {
+            return false;
+        }
+        if (this.bronze != country.bronze) {
+            return false;
+        }
         
+        return true;
     }
 }
 
@@ -51,20 +66,37 @@ public class Main {
             countries.add(country);
         }
         
-        countries.sort(null);
+        countries.sort(Collections.reverseOrder());
+        
+        // for (int i = 0; i < countries.size(); i++) {
+        //     Country country = countries.get(i);
+        //     System.out.println(country.num + " " + country.rank);
+        // }
         
         int rank = 0;
-        for (int i = 0; i < countries.size(); i++) {
-            Country country = countries.get(i);
+        for (int i = 1; i < countries.size(); i++) {
+            Country country1 = countries.get(i-1);
+            Country country2 = countries.get(i);
             
-            if (country.num == k) {
-                break;
+            if (country1.isSameRank(country2)) {
+                country2.rank = country1.rank;
+                continue;
             }
             
-            rank++;
+            country2.rank += i;
+        }
+        
+        int ans = 0;
+        for (int i = 0; i < countries.size(); i++) {
+            Country country = countries.get(i);
+            // System.out.println(country.num + " " + country.rank);
+            
+            if (country.num == k) {
+                ans = country.rank;
+            }
         }
         
         
-        System.out.println(rank);
+        System.out.println(ans);
     }
 }
